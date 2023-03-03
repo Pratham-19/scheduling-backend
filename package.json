@@ -1,0 +1,13 @@
+{
+  "name": "scheduling-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "author": "Pratham",
+  "license": "ISC"
+}
