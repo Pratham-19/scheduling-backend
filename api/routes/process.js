@@ -23,12 +23,11 @@ router.post("/time-quantum", (req, res) => {
   });
 });
 router.post("/calculation-arrival-same", (req, res) => {
-  console.log(req.body);
   if (
     !(
       req.body.processes &&
       req.body.burstTime &&
-      req.body.timeQuantum &&
+      // req.body.timeQuantum &&
       req.body.processes.length === req.body.burstTime.length
     )
   ) {
@@ -41,12 +40,19 @@ router.post("/calculation-arrival-same", (req, res) => {
     process;
   });
   const burstTime = req.body.burstTime;
-  const timeQuantum = req.body.timeQuantum;
+  let sumBt = 0;
+  burstTime.map((bt) => {
+    sumBt += parseInt(bt);
+  });
+  const timeQuantum = Math.floor(sumBt / n);
+
   let waitingTime = [];
   let turnAroundTime = [];
   let chart = [];
   var total_time = 0;
   let remainingBurstTime = [...burstTime];
+  remainingBurstTime = remainingBurstTime.map((bt) => parseInt(bt));
+  console.log(remainingBurstTime);
   while (true) {
     let done = true;
     for (let i = 0; i < n; i++) {
