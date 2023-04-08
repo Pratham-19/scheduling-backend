@@ -6,34 +6,16 @@ router.get("/", (req, res) => {
     message: "Handling GET requests to /process",
   });
 });
-
-router.post("/time-quantum", (req, res) => {
-  if (!req.body.burstTime)
-    return res.status(400).json({ message: "Burst time is required" });
-  const burstTime = req.body.burstTime;
-  const n = burstTime.length;
-  let sumBt = 0;
-  burstTime.map((bt) => {
-    sumBt += parseInt(bt);
-  });
-  const timeQuantum = Math.floor(sumBt / n);
-  res.status(200).json({
-    message: "Success",
-    timeQuantum: timeQuantum,
-  });
-});
 router.post("/calculation-arrival-same", (req, res) => {
   if (
     !(
       req.body.processes &&
       req.body.burstTime &&
-      // req.body.timeQuantum &&
       req.body.processes.length === req.body.burstTime.length
     )
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
-
   const processes = req.body.processes;
   const n = processes.length;
   processes.map((process) => {
@@ -45,14 +27,12 @@ router.post("/calculation-arrival-same", (req, res) => {
     sumBt += parseInt(bt);
   });
   const timeQuantum = Math.floor(sumBt / n);
-
   let waitingTime = [];
   let turnAroundTime = [];
   let chart = [];
   var total_time = 0;
   let remainingBurstTime = [...burstTime];
   remainingBurstTime = remainingBurstTime.map((bt) => parseInt(bt));
-  console.log(remainingBurstTime);
   while (true) {
     let done = true;
     for (let i = 0; i < n; i++) {
@@ -67,7 +47,7 @@ router.post("/calculation-arrival-same", (req, res) => {
           waitingTime[i] = total_time - burstTime[i];
           remainingBurstTime[i] = 0;
         }
-        chart.push(processes[i]);
+        chart.push([processes[i], total_time]);
       }
     }
     if (done === true) {
@@ -79,7 +59,9 @@ router.post("/calculation-arrival-same", (req, res) => {
     waitingTime: waitingTime,
     turnAroundTime: turnAroundTime,
     chart: chart,
+    timeQuantum: timeQuantum,
     total_time: total_time,
+    burstTime: burstTime,
   });
 });
 
