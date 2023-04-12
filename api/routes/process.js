@@ -54,6 +54,17 @@ router.post("/calculation-arrival-same", (req, res) => {
       break;
     }
   }
+  let sumWt = 0;
+  let sumTat = 0;
+  waitingTime.map((wt) => {
+    sumWt += wt;
+  });
+  turnAroundTime.map((x) => {
+    sumTat += x;
+  });
+  const awt = sumWt / n;
+  const atat = sumTat / n;
+
   res.status(200).json({
     message: "success",
     waitingTime: waitingTime,
@@ -62,6 +73,8 @@ router.post("/calculation-arrival-same", (req, res) => {
     timeQuantum: timeQuantum,
     total_time: total_time,
     burstTime: burstTime,
+    averageWaitingTime: awt.toFixed(2),
+    averageTurnAroundTime: atat.toFixed(2),
   });
 });
 
